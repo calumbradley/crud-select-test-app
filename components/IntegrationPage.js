@@ -8,39 +8,38 @@ import IntegrationPageEditView from "./IntegrationPageEditView";
 import IntegrationPageCreate from "./IntegrationPageCreate";
 
 const IntegrationPage = ({ formik }) => {
-  const { values } = formik;
-  const map = values.map;
+  const {
+    values: { map, action },
+  } = formik;
 
-  const initialSelectedValue = map && map.length > 0 ? "true" : "false";
-  const [selectedValue, setSelectedValue] = useState(initialSelectedValue);
-  const [isSelectDisabled, setIsSelectDisabled] = useState(!map);
-  const [showEditViewTable, setShowEditViewTable] = useState(true); // Initial state for showing the edit/view table
-  const [showCreateTable, setShowCreateTable] = useState(
-    initialSelectedValue === "true"
-  );
+  const getInitialSelectedValue = () =>
+    map && map.length > 0 ? "true" : "false";
+
+  const [selectedValue, setSelectedValue] = useState(getInitialSelectedValue);
+  const [showTable, setShowTable] = useState(selectedValue === "true");
 
   useEffect(() => {
+    const initialSelectedValue = getInitialSelectedValue();
     setSelectedValue(initialSelectedValue);
-    setIsSelectDisabled(!map);
-    setShowCreateTable(initialSelectedValue === "true");
-  }, [map, initialSelectedValue]);
+    setShowTable(initialSelectedValue === "true");
+  }, [map]);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSelectedValue(newValue);
-    setShowCreateTable(newValue === "true"); // Update showCreateTable based on selected value
-    setShowEditViewTable(newValue === "true"); // Set showEditViewTable based on selected value
+    setShowTable(newValue === "true");
   };
 
-  // Check for null or undefined map
-  if (map === null || map === undefined) {
+  const isSelectDisabled = !map;
+
+  if (!map) {
     return (
-      <div className="content-div">
+      <div>
         <FormControl fullWidth disabled>
           <InputLabel id="demo-simple-select-label">Select Value</InputLabel>
           <Select
             labelId="demo-simple-select-label"
-            value="false" // Set default value to 'false'
+            value="false"
             label="Select Value"
             onChange={handleChange}
             disabled
@@ -55,7 +54,7 @@ const IntegrationPage = ({ formik }) => {
   }
 
   return (
-    <div className="content-div">
+    <div>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Select Value</InputLabel>
         <Select
@@ -63,22 +62,17 @@ const IntegrationPage = ({ formik }) => {
           value={selectedValue}
           label="Select Value"
           onChange={handleChange}
-          disabled={!map}
+          disabled={isSelectDisabled}
         >
           <MenuItem value="true">Enabled</MenuItem>
           <MenuItem value="false">Disabled</MenuItem>
         </Select>
       </FormControl>
 
-      {values.action === "edit" ? (
-        <IntegrationPageEditView
-          formik={formik}
-          showTable={showEditViewTable}
-        />
+      {action === "edit" ? (
+        <IntegrationPageEditView formik={formik} showTable={showTable} />
       ) : (
-        showCreateTable && (
-          <IntegrationPageCreate formik={formik} showTable={true} />
-        )
+        showTable && <IntegrationPageCreate formik={formik} showTable={true} />
       )}
     </div>
   );
