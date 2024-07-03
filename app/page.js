@@ -8,21 +8,21 @@ const Home = () => {
     initialValues: {
       action: "edit", // Example action, change as per your logic
       // action: "create", // Example action, change as per your logic
-      // map: [
-      //   {
-      //     sourceSheet: "sourceSheet 1",
-      //     target: "target 1",
-      //     enforceEntitlement: true,
-      //     customEntitlement: "customEntitlement 1",
-      //   },
-      //   {
-      //     sourceSheet: "sourceSheet 2",
-      //     target: "target 2",
-      //     enforceEntitlement: false,
-      //     customEntitlement: "customEntitlement 2",
-      //   },
-      // ], // Dummy map value, change as needed
-      map: null,
+      map: [
+        {
+          sourceSheet: "sourceSheet 1",
+          target: "target 1",
+          enforceEntitlement: true,
+          customEntitlement: "customEntitlement 1",
+        },
+        {
+          sourceSheet: "sourceSheet 2",
+          target: "target 2",
+          enforceEntitlement: false,
+          customEntitlement: "customEntitlement 2",
+        },
+      ], // Dummy map value, change as needed
+      // map: null,
     },
   });
 
